@@ -1,5 +1,6 @@
 import arc.*;
 import java.awt.*;
+import java.awt.image.*;
 
 public class FinalCPTNila{
 	public static void main(String[] args){
@@ -47,7 +48,7 @@ public class FinalCPTNila{
 			
 			quizdispfile = new TextInputFile("quizzes.txt");
 			
-			while(quizdispfile.eof() == false && intCount1 < intNumQuiz){
+			while(quizdispfile.eof() == false){
 				strQuizList[intCount1] = quizdispfile.readLine();
 				con.println((intCount1 + 1) + ". " + strQuizList[intCount1]);
 				intCount1 += 1;
@@ -69,6 +70,8 @@ public class FinalCPTNila{
 			
 			int intRow;
 			String strChoice;
+			int intNumCorr = 0;
+			int intNumOut = 0;
 			
 			for(intRow = 0; intRow < strintooga.length; intRow++){
 				con.println("Question " + (intRow + 1) + ": " + strintooga[intRow][0]);
@@ -81,11 +84,16 @@ public class FinalCPTNila{
 				strChoice = con.readLine();
 				con.println();
 				
+				intNumOut += 1;
+				
 				if(strChoice.equalsIgnoreCase(strintooga[intRow][5])){
 					con.println("You're right pookie!!!!");
+					intNumCorr += 1;
 				}else{
 					con.println("Youre wrong pookie ahhhh!!!!");
 				}
+				
+				FinalCPTNila.show(strName, strQuizChoice, intNumOut, intNumCorr, con);
 				
 			}
 		}else if(strInitChoice.equalsIgnoreCase("Quit Game")){
@@ -176,9 +184,15 @@ public class FinalCPTNila{
 			intCount += 1;
 			
 		}
-		
+			
 		file.close();
 		return strQuizName;
+	}
+	
+	public static void show(String strUserName, String strQuizName, int intNumOut, int intNumCorr, Console con){
+		con.print(strUserName);
+		con.print(strQuizName);
+		con.print((int)((intNumCorr / intNumOut) * 100));
 	}
 	
 }
