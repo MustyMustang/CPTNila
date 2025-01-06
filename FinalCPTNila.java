@@ -95,9 +95,8 @@ public class FinalCPTNila{
 					con.println("Youre wrong pookie ahhhh!!!!");
 				}
 				
-				FinalCPTNila.show(strName, strQuizChoice, intNumOut, intNumCorr, con);
-				
 			}
+			con.println(FinalCPTNila.show(strName, strQuizChoice, intNumOut, intNumCorr, con));
 		}else if(strInitChoice.equalsIgnoreCase("Quit Game")){
 			con.closeConsole();
 		}
@@ -191,10 +190,12 @@ public class FinalCPTNila{
 		return strQuizName;
 	}
 	
-	public static void show(String strUserName, String strQuizName, int intNumOut, int intNumCorr, Console con){
+	public static int show(String strUserName, String strQuizName, int intNumOut, int intNumCorr, Console con){
 		con.print(strUserName);
 		con.print(strQuizName);
 		con.print((int)((intNumCorr / intNumOut) * 100));
+		
+		return (int)((intNumCorr / intNumOut * 100));
 	}
 	
 }
