@@ -54,6 +54,8 @@ public class FinalCPTNila{
 				intCount1 += 1;
 			}
 			
+			con.print("howdy" + intCount1);
+			
 			quizdispfile.close();
 			
 			con.print("Enter the quiz you want to play: ");
