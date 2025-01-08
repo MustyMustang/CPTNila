@@ -10,11 +10,9 @@ public class FinalCPTNila{
         
         String[][] strintooga = new String [0][0];
         String strName;
-        String strInitChoice;
+        char chrInitChoice;
         TextOutputFile quizlstfile = new TextOutputFile("quizzes.txt", true);
         
-        con.print("Enter your name: ");
-        strName = con.readLine();
         
         con.println("Select what you want to do: ");
         con.println("1. Play Quizzes");
@@ -22,13 +20,14 @@ public class FinalCPTNila{
         con.println("3. Help Screen");
         con.println("4. Quit Game");
         con.println("5. Add Quiz");
+        con.println();
         
-        strInitChoice = con.readLine();
-        
-        if(strInitChoice.equalsIgnoreCase("Add Quiz")){
+        chrInitChoice = con.getChar();
+        con.clear();
+        if(chrInitChoice == 'a'){
             quizlstfile.println(FinalCPTNila.addQuiz(con));
             quizlstfile.close();
-        }else if(strInitChoice.equalsIgnoreCase("Play Quizzes")){
+        }else if(chrInitChoice == 'p'){
             TextInputFile quizdispfile = new TextInputFile("quizzes.txt");
             
             String strQuizOption;
@@ -37,6 +36,9 @@ public class FinalCPTNila{
             int intNumQuiz = 0;
             int intCount1 = 0;
             
+            con.print("Enter your name: ");
+			strName = con.readLine();
+			
             while(quizdispfile.eof() == false){
                 quizdispfile.readLine();
                 intNumQuiz += 1;
@@ -65,7 +67,7 @@ public class FinalCPTNila{
             
             for(intCount2 = 0; intCount2 < intCount1; intCount2++){
                 if(strQuizChoice.equalsIgnoreCase(strQuizList[intCount2])){
-                    strintooga = FinalCPTNila.formatAndPrintQuiz(con, strQuizList[intCount2] + ".txt");
+                    strintooga = FinalCPTNila.formatQuiz(strQuizList[intCount2] + ".txt");
                     break;
                 }
             }
@@ -77,9 +79,8 @@ public class FinalCPTNila{
             
             for(intRow = 0; intRow < strintooga.length; intRow++){
                 con.clear();
-                con.setBackgroundColor(new Color(31, 6, 71));
                 FinalCPTNila.displayHeader(con, strName, strQuizChoice, intNumOut, intNumCorr);
-                strChoice = FinalCPTNila.formatAndPrintQuiz(con, strintooga, intRow);
+                strChoice = FinalCPTNila.printQuiz(con, strintooga, intRow);
                 con.println();
                 
                 intNumOut += 1;
@@ -94,13 +95,13 @@ public class FinalCPTNila{
             con.clear();
             FinalCPTNila.displayHeader(con, strName, strQuizChoice, intNumOut, intNumCorr);
             con.println("\nQuiz Complete!");
-        }else if(strInitChoice.equalsIgnoreCase("Quit Game")){
+        }else if(chrInitChoice == 'q'){
             con.closeConsole();
         }
             
     }
     
-    public static String[][] formatAndPrintQuiz(Console con, String fileName){
+    public static String[][] formatQuiz(String fileName){
         String[][] strQuizData;
         
         TextInputFile file = new TextInputFile(fileName);
@@ -129,7 +130,6 @@ public class FinalCPTNila{
         }
         file.close();
 
-        // Bubble Sort Logic
         int intRow2;
         String[] strTemp;
         for(intRow2 = 0; intRow2 < intTotalQ - 1; intRow2++){
@@ -144,7 +144,7 @@ public class FinalCPTNila{
         return strQuizData;
     }
     
-    public static String formatAndPrintQuiz(Console con, String[][] strQuizData, int intRow){
+    public static String printQuiz(Console con, String[][] strQuizData, int intRow){
         con.println("Question " + (intRow + 1) + ": " + strQuizData[intRow][0]);
         con.println("a) " + strQuizData[intRow][1]);
         con.println("b) " + strQuizData[intRow][2]);
