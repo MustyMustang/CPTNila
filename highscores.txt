@@ -1,0 +1,5 @@
+100.0
+0.0
+0.0
+Player: nila, Quiz: cars, Score: 67.0
+Player: nila, Quiz: cars, Score: 0.0
