@@ -74,27 +74,33 @@ public class FinalCPTNila{
             
             int intRow;
             String strChoice;
-            int intNumCorr = 0;
-            int intNumOut = 0;
+            float fltNumCorr = 0;
+            float fltNumOut = 0;
             
             for(intRow = 0; intRow < strintooga.length; intRow++){
-                con.clear();
-                FinalCPTNila.displayHeader(con, strName, strQuizChoice, intNumOut, intNumCorr);
+				con.clear();
+                FinalCPTNila.displayHeader(con, strName, strQuizChoice, fltNumOut, fltNumCorr);
+                System.out.println(fltNumCorr);
+                System.out.println(fltNumOut);
                 strChoice = FinalCPTNila.printQuiz(con, strintooga, intRow);
                 con.println();
                 
-                intNumOut += 1;
+                fltNumOut += 1;
                 
                 if(strChoice.equalsIgnoreCase(strintooga[intRow][5])){
                     con.println("You're right pookie!!!!");
-                    intNumCorr += 1;
+                    fltNumCorr += 1;
                 }else{
                     con.println("Youre wrong pookie ahhhh!!!!");
                 }
+                con.sleep(800);
             }
             con.clear();
-            FinalCPTNila.displayHeader(con, strName, strQuizChoice, intNumOut, intNumCorr);
+            FinalCPTNila.displayHeader(con, strName, strQuizChoice, fltNumOut, fltNumCorr);
             con.println("\nQuiz Complete!");
+            
+            con.println();
+            con.println("Would you like to (p)lay again, (q to quit) (m to go to main)");
         }else if(chrInitChoice == 'q'){
             con.closeConsole();
         }
@@ -197,10 +203,10 @@ public class FinalCPTNila{
         return strQuizName;
     }
     
-    public static void displayHeader(Console con, String strUserName, String strQuizName, int intNumOut, int intNumCorr){
+    public static void displayHeader(Console con, String strUserName, String strQuizName, float fltNumOut, float fltNumCorr){
         con.println("Player: " + strUserName);
         con.println("Quiz: " + strQuizName);
-        con.println("Progress: " + intNumCorr + "/" + intNumOut + " Correct");
+        con.println("Progress: " + Math.round((fltNumCorr / fltNumOut) * 100) + "%");
         con.println();
     }
 }
