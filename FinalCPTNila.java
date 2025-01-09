@@ -27,11 +27,11 @@ public class FinalCPTNila{
 			quizlstfile.println(FinalCPTNila.addQuiz(con));
 			quizlstfile.close();
 		} else if (chrInitChoice == 'p'){
-			TextInputFile quizdispfile = new TextInputFile("quizzes.txt");
 
 			boolean boolPlay = true;
 			
 			while(boolPlay == true){
+				TextInputFile quizdispfile = new TextInputFile("quizzes.txt");
 				String strQuizOption;
 				String strQuizChoice;
 				String[] strQuizList;
@@ -54,7 +54,7 @@ public class FinalCPTNila{
 
 				quizdispfile = new TextInputFile("quizzes.txt");
 
-				while (quizdispfile.eof() == false) {
+				while(quizdispfile.eof() == false && intCount1 < intNumQuiz) {
 					strQuizList[intCount1] = quizdispfile.readLine();
 					con.println((intCount1 + 1) + ". " + strQuizList[intCount1]);
 					intCount1 += 1;
@@ -106,7 +106,6 @@ public class FinalCPTNila{
 				con.println();
 				con.println("Would you like to (p)lay again, (q to quit) (m to go to main)");
 				chrReplay = con.getChar();
-				con.print("hi");
 				
 				if(chrReplay == 'q'){
 					con.closeConsole();
