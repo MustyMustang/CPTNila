@@ -12,16 +12,14 @@ public class FinalCPTNila{
 		String strName;
 		char chrInitChoice;
 		TextOutputFile quizlstfile = new TextOutputFile("quizzes.txt", true);
-
-		con.println("Select what you want to do: ");
-		con.println("1. Play Quizzes");
-		con.println("2. View High Scores");
-		con.println("3. Help Screen");
-		con.println("4. Quit Game");
-		con.println("5. Add Quiz");
+		
+		BufferedImage imgMainMenu  = con.loadImage("mainMenu.png");
+		
+		con.drawImage(imgMainMenu, 0, 0);
+		
 		con.println();
-
 		chrInitChoice = con.getChar();
+		con.setBackgroundColor(colBg);
 		con.clear();
 		if (chrInitChoice == 'a'){
 			quizlstfile.println(FinalCPTNila.addQuiz(con));
@@ -113,6 +111,11 @@ public class FinalCPTNila{
 					boolPlay = true;
 				}
 			}
+		}
+		else if(chrInitChoice == 'q'){
+			con.closeConsole();
+		}else if(chrInitChoice == 'l'){
+			//
 		}
 	}
 
@@ -215,7 +218,7 @@ public class FinalCPTNila{
 		con.println("Player: " + strUserName);
 		con.println("Quiz: " + strQuizName);
 		float fltScore = Math.round((fltNumCorr / fltNumOut) * 100);
-		con.println("Score: " + fltScore + "%");
+		con.println("Score: " + fltScore + " %");
 		con.println();
 
 		return fltScore;
