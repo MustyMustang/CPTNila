@@ -51,17 +51,23 @@ public class FinalCPTNila{
 				quizdispfile.close();
 
 				quizdispfile = new TextInputFile("quizzes.txt");
-
+				
+				con.println("Shadow Scholar: Quiz Selection");
+				con.println("------------------------------------");
+				int intLength;
+				
 				while(quizdispfile.eof() == false && intCount1 < intNumQuiz) {
 					strQuizList[intCount1] = quizdispfile.readLine();
-					con.println((intCount1 + 1) + ". " + strQuizList[intCount1]);
+					intLength = strQuizList[intCount1].length();
+					con.println((intCount1 + 1) + ". " + ((strQuizList[intCount1]).substring(0, 1)).toUpperCase() + (strQuizList[intCount1]).substring(1, intLength));
 					intCount1 += 1;
 				}
 
 				System.out.println("Number of quizzes: " + intCount1);
 
 				quizdispfile.close();
-
+				
+				con.println();
 				con.print("Enter the quiz you want to play: ");
 				strQuizChoice = con.readLine();
 				con.println();
@@ -101,6 +107,8 @@ public class FinalCPTNila{
 				
 				TextOutputFile highscoresfile = new TextOutputFile("highscores.txt", true);
 				highscoresfile.println(FinalCPTNila.displayHeader(con, strName, strQuizChoice, fltNumOut, fltNumCorr));
+				highscoresfile.println(strName);
+				highscoresfile.println(strQuizChoice);
 				con.println();
 				con.println("Would you like to (p)lay again, (q to quit) (m to go to main)");
 				chrReplay = con.getChar();
@@ -215,10 +223,12 @@ public class FinalCPTNila{
 	}
 
 	public static float displayHeader(Console con, String strUserName, String strQuizName, float fltNumOut, float fltNumCorr){
+		con.println("------------------------------------");
 		con.println("Player: " + strUserName);
 		con.println("Quiz: " + strQuizName);
 		float fltScore = Math.round((fltNumCorr / fltNumOut) * 100);
 		con.println("Score: " + fltScore + " %");
+		con.println("------------------------------------");
 		con.println();
 
 		return fltScore;
