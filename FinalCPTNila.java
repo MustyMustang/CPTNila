@@ -4,233 +4,215 @@ import java.awt.image.*;
 
 public class FinalCPTNila{
 	public static void main(String[] args){
+		
+		// Create and initialise console formatting
 		Console con = new Console("Shadow Scholar", 1280, 720);
 		Color colBg = new Color(31, 6, 71);
 		con.setBackgroundColor(colBg);
 
-		String[][] strintooga = new String[0][0];
+		// Create and initialise loop variables and main menu screen
+		int intDone = 0;
+		String[][] strQuizData = new String[0][0];
+		BufferedImage imgMainMenu = con.loadImage("mainMenu.png");
 		String strName;
 		char chrInitChoice;
-		TextOutputFile quizlstfile = new TextOutputFile("quizzes.txt", true);
 		
-		BufferedImage imgMainMenu  = con.loadImage("mainMenu.png");
-		
-		con.drawImage(imgMainMenu, 0, 0);
-		
-		con.println();
-		chrInitChoice = con.getChar();
-		con.setBackgroundColor(colBg);
-		con.clear();
-		if (chrInitChoice == 'a'){
-			quizlstfile.println(FinalCPTNila.addQuiz(con));
-			quizlstfile.close();
-		} else if (chrInitChoice == 'p'){
-
-			boolean boolPlay = true;
+		// Loop for running throughout the whole game
+		while(intDone == 0){
+			con.clear();
+			con.drawImage(imgMainMenu, 0, 0);
 			
-			while(boolPlay == true){
-				TextInputFile quizdispfile = new TextInputFile("quizzes.txt");
-				String strQuizOption;
-				String strQuizChoice;
-				String[] strQuizList;
+			// Ask user for the option they want to do
+			con.println();
+			chrInitChoice = con.getChar();
+			con.setBackgroundColor(colBg);
+			
+			// Loop if they choose to play a quiz
+			if(chrInitChoice == 'p'){
+				int intReplay = 1;
 				char chrReplay;
-				int intNumQuiz = 0;
-				int intCount1 = 0;
-				int intRow;
-				String strChoice;
-				float fltNumCorr = 0;
-				float fltNumOut = 0;
 
-				while (quizdispfile.eof() == false){
-					quizdispfile.readLine();
-					intNumQuiz += 1;
-				}
+				while(intReplay == 1){
+					// Initialise and create variables for quiz playing
+					TextInputFile quizListFile = new TextInputFile("quizzes.txt");
+					int intQuizChoice;
+					String strQuizChoice = "";
+					String[] strQuizList;
+					int intQuizLength = 0;
+					int intQCount = 0;
+					float fltNumCorr = 0;
+					float fltNumOut = 0; 
+					int intNumQuiz = 0;
+					int intRow;
+					int intIndex;
 
-				strQuizList = new String[intNumQuiz];
-
-				quizdispfile.close();
-
-				quizdispfile = new TextInputFile("quizzes.txt");
-				
-				con.println("Shadow Scholar: Quiz Selection");
-				con.println("------------------------------------");
-				int intLength;
-				
-				while(quizdispfile.eof() == false && intCount1 < intNumQuiz) {
-					strQuizList[intCount1] = quizdispfile.readLine();
-					intLength = strQuizList[intCount1].length();
-					con.println((intCount1 + 1) + ". " + ((strQuizList[intCount1]).substring(0, 1)).toUpperCase() + (strQuizList[intCount1]).substring(1, intLength));
-					intCount1 += 1;
-				}
-
-				System.out.println("Number of quizzes: " + intCount1);
-
-				quizdispfile.close();
-				
-				con.println();
-				con.print("Enter the quiz you want to play: ");
-				strQuizChoice = con.readLine();
-				con.println();
-
-				con.print("Enter your name: ");
-				strName = con.readLine();
-
-				int intCount2;
-
-				for (intCount2 = 0; intCount2 < intCount1; intCount2++){
-					if (strQuizChoice.equalsIgnoreCase(strQuizList[intCount2])){
-						strintooga = FinalCPTNila.formatQuiz(strQuizList[intCount2] + ".txt");
-						break;
+					// Count number of quizzes from file
+					while(quizListFile.eof() == false){
+						quizListFile.readLine();
+						intNumQuiz += 1;
 					}
-				}
 
-				for (intRow = 0; intRow < strintooga.length; intRow++){
+					// Put quizzes into an array for later iteration
+					strQuizList = new String[intNumQuiz];
+					quizListFile.close();
+					quizListFile = new TextInputFile("quizzes.txt");
+
+					// Clear screen and print header
 					con.clear();
-					FinalCPTNila.displayHeader(con, strName, strQuizChoice, fltNumOut, fltNumCorr);
-					System.out.println(fltNumCorr);
-					System.out.println(fltNumOut);
-					strChoice = FinalCPTNila.printQuiz(con, strintooga, intRow);
+					con.println("Shadow Scholar: Quiz Selection");
+					con.println("------------------------------------");
+
+					
+					// Print out quiz options in a numbered list to console
+					while(quizListFile.eof() == false && intQCount < intNumQuiz){
+						strQuizList[intQCount] = quizListFile.readLine();
+						intQuizLength = strQuizList[intQCount].length();
+						strQuizList[intQCount] = (strQuizList[intQCount]).substring(0, 1).toUpperCase() + (strQuizList[intQCount]).substring(1, intQuizLength);
+						con.println((intQCount + 1) + ". " + (strQuizList[intQCount]));
+						intQCount += 1;
+					}
+
+					quizListFile.close();
+
+					// Get quiz selection from user
+					con.println();
+					con.print("Enter the quiz you want to play (1 - " + (intNumQuiz) + "): ");
+					intQuizChoice = con.readInt();
+
+					// Make sure the quiz choice is an option from the numbered list
+					if(intQuizChoice >= 1 && intQuizChoice <= intNumQuiz){
+						strQuizChoice = strQuizList[intQuizChoice - 1];
+						System.out.println("Quiz Choice: " + strQuizChoice);
+						// Open file from the selected choice
+						strQuizData = FinalCPTNilatools.formatQuiz(strQuizChoice.toLowerCase() + ".txt");
+					}
+					
+					// Ask user for their name
+					con.print("Enter your name: ");
+					strName = con.readLine();
 					con.println();
 
-					fltNumOut += 1;
+					// Loop to print out questions and header bar with information
+					for(intRow = 0; intRow < strQuizData.length; intRow++){
+						con.clear();
+						con.println("Shadow Scholar: Quiz Playing");
+						FinalCPTNilatools.displayHeader(con, strName, strQuizChoice, fltNumOut, fltNumCorr);
+						
+						// Get the index number associated with the letter the user selected
+						intIndex = FinalCPTNilatools.printQuiz(con, strQuizData, intRow);
 
-					if (strChoice.equalsIgnoreCase(strintooga[intRow][5])){
-						con.println("You're right pookie!!!!");
-						fltNumCorr += 1;
-					} else {
-						con.println("You're wrong pookie ahhhh!!!!");
+						con.println();
+						fltNumOut += 1;
+						
+						// Check if the user is correct or wrong
+						if(strQuizData[intRow][intIndex].equals(strQuizData[intRow][5])){
+							fltNumCorr += 1;
+							con.println("You are Correct!");
+						}else{
+							con.println("You are Wrong! The Correct Answer was: " + strQuizData[intRow][5]);
+						}
+						
+						// Wait a few miliseconds until printing out the next question
+						con.println();
+						con.sleep(800);
 					}
-					con.sleep(800);
+					con.clear();
+					con.println();
+					con.println("Quiz Completed!");
+
+					// Score saved to highscores file
+					TextOutputFile highscoresfile = new TextOutputFile("highscores.txt", true);
+					highscoresfile.println(strName);
+					highscoresfile.println(FinalCPTNilatools.displayHeader(con, strName, strQuizChoice, fltNumOut, fltNumCorr));
+					highscoresfile.close();
+					
+					// Ask user what they want to do after playing the quiz
+					con.println();
+					con.print("Would you like to (p)lay again, return to (m)ain menu, or (q)uit?");
+					chrReplay = con.getChar();
+					con.clear();
+
+					if(chrReplay == 'q'){
+						// Quit the game
+						intDone = 1;
+						intReplay = 0;
+						con.closeConsole();
+					}else if(chrReplay == 'm'){
+						// Go back to the main screen
+						intReplay = 0;
+					}else if(chrReplay == 'p'){
+						// intReplay is set to 
+						intReplay = 1;
+					}else{
+						intReplay = 0;
+						con.println("Going back to the main menu");
+						con.sleep(800);
+					}
 				}
-				con.clear();
-				con.println("\nQuiz Complete!");
+			
+			// Condition when user chooses to add a quiz
+			}else if(chrInitChoice == 'a'){
+				// Open quizzes file and output the name 
+				TextOutputFile quizListOutput = new TextOutputFile("quizzes.txt", true);
+				quizListOutput.println(FinalCPTNilatools.addQuiz(con));
+				quizListOutput.close();
 				
-				TextOutputFile highscoresfile = new TextOutputFile("highscores.txt", true);
-				highscoresfile.println(FinalCPTNila.displayHeader(con, strName, strQuizChoice, fltNumOut, fltNumCorr));
-				highscoresfile.println(strName);
-				highscoresfile.println(strQuizChoice);
-				con.println();
-				con.println("Would you like to (p)lay again, (q to quit) (m to go to main)");
-				chrReplay = con.getChar();
+				// User chooses to go to main menu or quit
+				con.println("(m)ain menu, (q)uit");
+				chrInitChoice = con.getChar();
 				
-				if(chrReplay == 'q'){
+				// User chooses to quit game
+				if(chrInitChoice == 'q'){
+					intDone = 1;
 					con.closeConsole();
-				}else if(chrReplay == 'p'){
-					boolPlay = true;
+				}else if(chrInitChoice == 'm'){
+					intDone = 0;
 				}
-			}
-		}
-		else if(chrInitChoice == 'q'){
-			con.closeConsole();
-		}else if(chrInitChoice == 'l'){
-			//
-		}
-	}
-
-	public static String[][] formatQuiz(String fileName){
-		String[][] strQuizData;
-
-		TextInputFile file = new TextInputFile(fileName);
-		int intQCount = 0;
-
-		while (file.eof() == false) {
-			String strLine = file.readLine();
-			intQCount += 1;
-		}
-
-		int intTotalQ = intQCount / 6;
-		strQuizData = new String[intTotalQ][7];
-		int intRow;
-
-		file.close();
-		file = new TextInputFile(fileName);
-
-		for (intRow = 0; intRow < intTotalQ; intRow++){
-			strQuizData[intRow][0] = file.readLine();
-			strQuizData[intRow][1] = file.readLine();
-			strQuizData[intRow][2] = file.readLine();
-			strQuizData[intRow][3] = file.readLine();
-			strQuizData[intRow][4] = file.readLine();
-			strQuizData[intRow][5] = file.readLine();
-			strQuizData[intRow][6] = String.valueOf((int) (Math.random() * 100 + 1));
-		}
-		file.close();
-
-		int intRow2;
-		String[] strTemp;
-		for (intRow2 = 0; intRow2 < intTotalQ - 1; intRow2++){
-			for (intRow = 0; intRow < intTotalQ - 1 - intRow2; intRow++){
-				if (Integer.parseInt(strQuizData[intRow][6]) > Integer.parseInt(strQuizData[intRow + 1][6])){
-					strTemp = strQuizData[intRow];
-					strQuizData[intRow] = strQuizData[intRow + 1];
-					strQuizData[intRow + 1] = strTemp;
+				
+			// User chooses to quit game
+			}else if(chrInitChoice == 'q'){
+				intDone = 1;
+				con.closeConsole();
+			
+			// User chooses to look at the leaderboard
+			}else if(chrInitChoice == 'l'){
+				con.clear();
+				
+				// Openn highscores file
+				TextInputFile leaderBoardFile = new TextInputFile("highscores.txt");
+				String strNameL = "";
+				String strScore = "";
+				
+				// Display header
+				con.println("Shadow Scholar: Leaderboard");
+				con.println("------------------------------------");
+				
+				// Print out name and score from the file
+				while(leaderBoardFile.eof() == false){
+					strNameL = leaderBoardFile.readLine();
+					strScore = leaderBoardFile.readLine();
+					con.println(strNameL + ": " + strScore + "%");
 				}
+
+				leaderBoardFile.close();
+
+				con.println();
+				con.println("(q)uit or any letter to go back to main menu");
+				chrInitChoice = con.getChar();
+				
+				// Quit game or head back to main menu from leaderboard screen
+				if(chrInitChoice == 'q'){
+					intDone = 1;
+					con.closeConsole();
+				}else if(chrInitChoice == 'm'){
+					intDone = 0;
+				}
+		// If one of the options from the main menu is not selected, it will return back to the main menu
+			}else{
+				con.print("Heading back to Main Menu");
+				con.sleep(800);
 			}
 		}
-		return strQuizData;
 	}
 
-	public static String printQuiz(Console con, String[][] strQuizData, int intRow){
-		con.println("Question " + (intRow + 1) + ": " + strQuizData[intRow][0]);
-		con.println("a) " + strQuizData[intRow][1]);
-		con.println("b) " + strQuizData[intRow][2]);
-		con.println("c) " + strQuizData[intRow][3]);
-		con.println("d) " + strQuizData[intRow][4]);
-		con.println();
-		con.print("Enter your choice: ");
-		return con.readLine();
-	}
-
-	public static String addQuiz(Console con){
-		String strQuizName;
-
-		con.print("Enter the name of your quiz: ");
-		strQuizName = con.readLine();
-
-		TextOutputFile file = new TextOutputFile(strQuizName + ".txt");
-		con.println("When you are finished with your quiz simply write \"end\".");
-
-		int intEndCheck = 0;
-		String strUserQuiz;
-		int intCount = 1;
-		int intLine;
-
-		while (intEndCheck == 0) {
-			con.print("Question " + intCount + ": ");
-			strUserQuiz = con.readLine();
-			if (strUserQuiz.equalsIgnoreCase("end")){
-				intEndCheck = 1;
-				break;
-			}
-
-			file.println(strUserQuiz);
-
-			for (intLine = 1; intLine <= 4; intLine++){
-				con.print("Option " + intLine + ": ");
-				strUserQuiz = con.readLine();
-				file.println(strUserQuiz);
-			}
-
-			con.print("Correct Option: ");
-			strUserQuiz = con.readLine();
-			file.println(strUserQuiz);
-
-			intCount += 1;
-		}
-
-		file.close();
-		return strQuizName;
-	}
-
-	public static float displayHeader(Console con, String strUserName, String strQuizName, float fltNumOut, float fltNumCorr){
-		con.println("------------------------------------");
-		con.println("Player: " + strUserName);
-		con.println("Quiz: " + strQuizName);
-		float fltScore = Math.round((fltNumCorr / fltNumOut) * 100);
-		con.println("Score: " + fltScore + " %");
-		con.println("------------------------------------");
-		con.println();
-
-		return fltScore;
-	}
 }
