@@ -85,9 +85,12 @@ public class FinalCPTNila{
 						System.out.println("Quiz Choice: " + strQuizChoice);
 						// Open file from the selected choice
 						strQuizData = FinalCPTNilatools.formatQuiz(strQuizChoice.toLowerCase() + ".txt");
+					}else{
+						System.out.println("Invalid Input");
 					}
 					
 					// Ask user for their name
+					con.println();
 					con.print("Enter your name: ");
 					strName = con.readLine();
 					con.println();
@@ -118,6 +121,7 @@ public class FinalCPTNila{
 					}
 					con.clear();
 					con.println();
+					con.setBackgroundColor(colBg);
 					con.println("Quiz Completed!");
 
 					// Score saved to highscores file
@@ -145,8 +149,7 @@ public class FinalCPTNila{
 						intReplay = 1;
 					}else{
 						intReplay = 0;
-						con.println("Going back to the main menu");
-						con.sleep(800);
+						System.out.println("Invalid Input. Going back to the main menu");
 					}
 				}
 			
@@ -167,6 +170,8 @@ public class FinalCPTNila{
 					con.closeConsole();
 				}else if(chrInitChoice == 'm'){
 					intDone = 0;
+				}else{
+					System.out.println("Invalid Input. Going back to the main menu");
 				}
 				
 			// User chooses to quit game
@@ -176,28 +181,11 @@ public class FinalCPTNila{
 			
 			// User chooses to look at the leaderboard
 			}else if(chrInitChoice == 'l'){
-				con.clear();
 				
-				// Openn highscores file
-				TextInputFile leaderBoardFile = new TextInputFile("highscores.txt");
-				String strNameL = "";
-				String strScore = "";
-				
-				// Display header
-				con.println("Shadow Scholar: Leaderboard");
-				con.println("------------------------------------");
-				
-				// Print out name and score from the file
-				while(leaderBoardFile.eof() == false){
-					strNameL = leaderBoardFile.readLine();
-					strScore = leaderBoardFile.readLine();
-					con.println(strNameL + ": " + strScore + "%");
-				}
-
-				leaderBoardFile.close();
+				FinalCPTNilatools.leaderBoard(con);
 
 				con.println();
-				con.println("(q)uit or any letter to go back to main menu");
+				con.println("(q)uit or (m)ain menu");
 				chrInitChoice = con.getChar();
 				
 				// Quit game or head back to main menu from leaderboard screen
@@ -206,13 +194,32 @@ public class FinalCPTNila{
 					con.closeConsole();
 				}else if(chrInitChoice == 'm'){
 					intDone = 0;
+				}else{
+					System.out.println("Invalid Input. Going back to main menu");
 				}
-		// If one of the options from the main menu is not selected, it will return back to the main menu
+			}else if(chrInitChoice == 'h'){
+				FinalCPTNilatools.helpScreen(con);
+				con.println();
+				con.println("(q)uit or (m)ain menu");
+				chrInitChoice = con.getChar();
+				
+				if(chrInitChoice == 'q'){
+					intDone = 1;
+					con.closeConsole();
+				}else if(chrInitChoice == 'm'){
+					intDone = 0;
+				}else{
+					System.out.println("Invalid Input. Going back to main menu");
+				}
+			}else if(chrInitChoice == 's'){
+				FinalCPTNilatools.secretScreen(con);
+			// If one of the options from the main menu is not selected, it will return back to the main menu
 			}else{
-				con.print("Heading back to Main Menu");
-				con.sleep(800);
+				System.out.println("Invalid Input. Going back to main menu");
 			}
 		}
 	}
 
 }
+
+// numbering for quiz list should be fool proof

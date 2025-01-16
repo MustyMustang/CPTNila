@@ -1,4 +1,5 @@
 import arc.*;
+import java.awt.image.*;
 
 public class FinalCPTNilatools{
 	
@@ -61,13 +62,38 @@ public class FinalCPTNilatools{
 	public static int printQuiz(Console con, String[][] strQuizData, int intRow){
 		String strChoice;
 		int intChoice = -1;
-
-		con.println("Question " + (intRow + 1) + ": " + strQuizData[intRow][0]);
-		con.println("a) " + strQuizData[intRow][1]);
-		con.println("b) " + strQuizData[intRow][2]);
-		con.println("c) " + strQuizData[intRow][3]);
-		con.println("d) " + strQuizData[intRow][4]);
-		con.println();
+		int intQLength = 0;
+		
+		// Print one question at a time, with options (a-d)
+		intQLength = (strQuizData[intRow][0]).length();
+		
+		if (intQLength >= 4 && strQuizData[intRow][0].substring(intQLength - 4, intQLength).equalsIgnoreCase(".png")){
+			BufferedImage imgQuestion = con.loadImage(strQuizData[intRow][0]);
+			con.println();
+			con.println();
+			con.println();
+			con.println();
+			con.drawImage(imgQuestion, 0, 150);
+			con.println();
+			con.println();
+			con.println();
+			con.println();
+			con.println();
+			con.println();
+			con.println("a) " + strQuizData[intRow][1]);
+			con.println("b) " + strQuizData[intRow][2]);
+			con.println("c) " + strQuizData[intRow][3]);
+			con.println("d) " + strQuizData[intRow][4]);
+			con.println();
+		}else{
+			con.println("Question " + (intRow + 1) + ": " + strQuizData[intRow][0]);
+			con.println("a) " + strQuizData[intRow][1]);
+			con.println("b) " + strQuizData[intRow][2]);
+			con.println("c) " + strQuizData[intRow][3]);
+			con.println("d) " + strQuizData[intRow][4]);
+			con.println();
+		}
+		
 
 		while(intChoice == -1){
 			con.print("Enter your choice (a, b, c, or d): ");
@@ -104,6 +130,8 @@ public class FinalCPTNilatools{
 		String strUserQuiz = "";
 		int intCount = 1;
 		int intLine;
+		String[] strOptions;
+		strOptions = new String[4];
 
 		while(intEndCheck == 0){
 			if(strUserQuiz.equalsIgnoreCase("end")){
@@ -115,15 +143,23 @@ public class FinalCPTNilatools{
 			strUserQuiz = con.readLine();
 			file.println(strUserQuiz);
 
-			for(intLine = 1; intLine <= 4; intLine++){
-				con.print("Option " + intLine + ": ");
-				strUserQuiz = con.readLine();
-				file.println(strUserQuiz);
+			for(intLine = 0; intLine < 4; intLine++){
+				con.print("Option " + (intLine + 1) + ": ");
+				strOptions[intLine] = con.readLine();
+				file.println(strOptions[intLine]);
 			}
-
-			con.print("Correct Option: ");
-			strUserQuiz = con.readLine();
-			file.println(strUserQuiz);
+			
+			int intCorrectOption = 0;
+			
+			while(intCorrectOption < 1 || intCorrectOption > 4){
+				con.print("Correct Option (1-4): ");
+				intCorrectOption = con.readInt();
+				if (intCorrectOption < 1 || intCorrectOption > 4){
+					con.println("Invalid input");
+				}
+			}
+			
+			file.println(strOptions[intCorrectOption - 1]);
 
 			intCount += 1;
 			con.println();
@@ -146,6 +182,98 @@ public class FinalCPTNilatools{
 
 		return fltScore;
 	}
+	
+	public static void leaderBoard(Console con){
+		// Open highscores file
+		TextInputFile leaderBoardFile = new TextInputFile("highscores.txt");
+		String strNameL = "";
+		String strScore = "";
+		int intCount = 0;
+		String[][] strLeaderboard;
+		String strLine;
+		int intRow;
+		int intRow2;
+		int intBiggestName = 0;
+		
+		while(leaderBoardFile.eof() == false){
+			strLine = leaderBoardFile.readLine();
+			intCount += 1;
+		}
+		
+		int intTotal = intCount / 2;
+		strLeaderboard = new String[intCount][2];
+		leaderBoardFile.close();
+		
+		leaderBoardFile = new TextInputFile("highscores.txt");
+		
+		for(intRow = 0; intRow < intTotal; intRow++){
+			strLeaderboard[intRow][0] = leaderBoardFile.readLine();
+			strLeaderboard[intRow][1] = leaderBoardFile.readLine();
+		}
+		
+	
+		
+		String[] strTemp;
+		for(intRow2 = 0; intRow2 < intTotal - 1; intRow2++){
+			for(intRow = 0; intRow < intTotal - 1 - intRow2; intRow++){
+				if(Float.parseFloat(strLeaderboard[intRow][1]) > Float.parseFloat(strLeaderboard[intRow + 1][1])){
+					// Use a temporary array to move up and down a questions and their answers at a time
+					strTemp = strLeaderboard[intRow];
+					strLeaderboard[intRow] = strLeaderboard[intRow + 1];
+					strLeaderboard[intRow + 1] = strTemp;
+				}
+			}
+		}
+		
+		for(intRow = 0; intRow < intTotal; intRow++){
+			if(strLeaderboard[intRow][0].length() > intBiggestName){
+				intBiggestName = strLeaderboard[intRow][0].length();
+			}
+		}
+		
+		
+		
+		// Display header
+		con.println("Shadow Scholar: Leaderboard");
+		con.println("------------------------------------");
+		for (intRow = 0; intRow < intTotal; intRow++) {
+			String strName = strLeaderboard[intRow][0];
+			String strSpaces = "";
+			// Add spaces to align names
+			for (intRow2 = strName.length(); intRow2 < intBiggestName + 2; intRow2++) {
+				strSpaces += " ";
+			}
 
+			con.println((intRow + 1) + ". " + strName + strSpaces + "| " + strLeaderboard[intRow][1]);
+		}
+	}
 
+	public static void helpScreen(Console con){
+		con.println("Shadow Scholar: Help Screen");
+		con.println("------------------------------------");
+		con.println("Greetings, Scholar! Prepare yourself for an exciting, fun, and addictive game");
+		con.println("designed to boost your general knowledge and challenge other with your own niche knowledge");
+		con.println();
+		
+		con.println("How to Play");
+		con.println("Use key inputs to select from the main menu:");
+		con.println("P: Play Quizzes");
+		con.println("A: Add Quizzes");
+		con.println("L: Show Leaderboard");
+		con.println("Q: Quit Game");
+		con.println();
+		
+		con.println("Playing Quizzes");
+		con.println("Questions appear one at a time");
+		con.println("Enter the answer options which corresponds with a, b, c, or ,d and hit enter");
+		con.println("When correct, a point is added to your score, when wrong the correct answer is displayed");
+		con.println("for future reference");
+	}
+	
+	public static void secretScreen(Console con){
+		con.println("What do you call a fake noodle?");
+		con.sleep(1000);
+		con.println("An impasta");
+		con.sleep(3000);
+	}
 }
