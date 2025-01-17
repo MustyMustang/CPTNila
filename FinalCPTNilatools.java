@@ -270,6 +270,7 @@ public class FinalCPTNilatools{
 		con.println("for future reference");
 	}
 	
+	// Method to print out secret screen for a few seconds
 	public static void secretScreen(Console con){
 		con.println("What do you call a fake noodle?");
 		con.sleep(1000);
