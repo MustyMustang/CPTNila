@@ -216,7 +216,7 @@ public class FinalCPTNilatools{
 		String[] strTemp;
 		for(intRow2 = 0; intRow2 < intTotal - 1; intRow2++){
 			for(intRow = 0; intRow < intTotal - 1 - intRow2; intRow++){
-				if(Float.parseFloat(strLeaderboard[intRow][1]) > Float.parseFloat(strLeaderboard[intRow + 1][1])){
+				if(Float.parseFloat(strLeaderboard[intRow][1]) < Float.parseFloat(strLeaderboard[intRow + 1][1])){
 					// Use a temporary array to move up and down a questions and their answers at a time
 					strTemp = strLeaderboard[intRow];
 					strLeaderboard[intRow] = strLeaderboard[intRow + 1];

@@ -197,12 +197,14 @@ public class FinalCPTNila{
 				}else{
 					System.out.println("Invalid Input. Going back to main menu");
 				}
+			// If help screen is chosen from main menu print out aiding instructions
 			}else if(chrInitChoice == 'h'){
 				FinalCPTNilatools.helpScreen(con);
 				con.println();
 				con.println("(q)uit or (m)ain menu");
 				chrInitChoice = con.getChar();
 				
+				// Quit game or head back to main menu from leaderboard screen
 				if(chrInitChoice == 'q'){
 					intDone = 1;
 					con.closeConsole();
@@ -211,6 +213,8 @@ public class FinalCPTNila{
 				}else{
 					System.out.println("Invalid Input. Going back to main menu");
 				}
+			
+			// If s is pressed, print out the secret joke to the screen
 			}else if(chrInitChoice == 's'){
 				FinalCPTNilatools.secretScreen(con);
 			// If one of the options from the main menu is not selected, it will return back to the main menu
