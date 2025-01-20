@@ -2,6 +2,17 @@ import arc.*;
 import java.awt.*;
 import java.awt.image.*;
 
+/* 
+-------------------------------------------------------------------------------
+Name:	    Multiple Choice Game (ICS3U1)
+Purpose:	Facilitate a fun and engaging way to boost your general knowledge 
+            and challenge others with your own niche knowledge
+Author:		Mathivannan. N 
+
+Created:	19/12/2024
+-------------------------------------------------------------------------------
+*/
+
 public class FinalCPTNila{
 	public static void main(String[] args){
 		
@@ -101,12 +112,12 @@ public class FinalCPTNila{
 					con.repaint();
 					con.setBackgroundColor(colBg);
 					
-					// Open higscores file and out score and name to the file
-					TextOutputFile highscoresfile = new TextOutputFile("highscores.txt", true);
-					highscoresfile.println(strName); // Store the name to the highscores file
+					// Open higscores file and put score and name to the file
+					TextOutputFile fileHighscores = new TextOutputFile("highscores.txt", true);
+					fileHighscores.println(strName); // Store the name to the highscores file
 					double dblScore = FinalCPTNilatools.displayHeader(con, strName, strQuizChoice, dblNumOut, dblNumCorr, strQuizData.length);
-					highscoresfile.println(dblScore); // Store the score to the highscores file
-					highscoresfile.close(); 
+					fileHighscores.println(dblScore); // Store the score to the highscores file
+					fileHighscores.close(); 
 					
 					// Display that the quiz was completed
 					con.println();
@@ -147,9 +158,9 @@ public class FinalCPTNila{
 			// Condition when user chooses to add a quiz
 			}else if(chrInitChoice == 'a'){
 				// Open quizzes file and output the name of the user's quiz
-				TextOutputFile quizListOutput = new TextOutputFile("quizzes.txt", true);
-				quizListOutput.println(FinalCPTNilatools.addQuiz(con));
-				quizListOutput.close();
+				TextOutputFile fileQuizList = new TextOutputFile("quizzes.txt", true);
+				fileQuizList.println(FinalCPTNilatools.addQuiz(con));
+				fileQuizList.close();
 				
 				// User chooses to go to main menu or quit
 				con.println("(m)ain menu, (q)uit");

@@ -9,12 +9,12 @@ public class FinalCPTNilatools{
 		String[][] strQuizData;
 
 		// Open quiz file and initialise variables for looping
-		TextInputFile file = new TextInputFile(fileName);
+		TextInputFile fileQuiz = new TextInputFile(fileName);
 		int intCount = 0;
 		
 		// Count number of lines
-		while(file.eof() == false){
-			String strLine = file.readLine();
+		while(fileQuiz.eof() == false){
+			String strLine = fileQuiz.readLine();
 			intCount += 1;
 		}
 		
@@ -25,23 +25,23 @@ public class FinalCPTNilatools{
 		strQuizData = new String[intTotalQ][7];
 		int intRow;
 
-		file.close();
+		fileQuiz.close();
 		
 		// Open file again to store data into the array
-		file = new TextInputFile(fileName);
+		fileQuiz = new TextInputFile(fileName);
 
 		for(intRow = 0; intRow < intTotalQ; intRow++){
-			strQuizData[intRow][0] = file.readLine();
-			strQuizData[intRow][1] = file.readLine();
-			strQuizData[intRow][2] = file.readLine();
-			strQuizData[intRow][3] = file.readLine();
-			strQuizData[intRow][4] = file.readLine();
-			strQuizData[intRow][5] = file.readLine();
+			strQuizData[intRow][0] = fileQuiz.readLine();
+			strQuizData[intRow][1] = fileQuiz.readLine();
+			strQuizData[intRow][2] = fileQuiz.readLine();
+			strQuizData[intRow][3] = fileQuiz.readLine();
+			strQuizData[intRow][4] = fileQuiz.readLine();
+			strQuizData[intRow][5] = fileQuiz.readLine();
 			// Put a random integer in the 7th column to use later for bubble sorting
 			strQuizData[intRow][6] = String.valueOf((int) (Math.random() * 100 + 1));
 		}
 		
-		file.close();
+		fileQuiz.close();
 		
 		// Bubble Sort
 		int intRow2;
@@ -148,7 +148,7 @@ public class FinalCPTNilatools{
 		con.println();
 		
 		// Open a new text file with the user selected quiz
-		TextOutputFile file = new TextOutputFile(strQuizName + ".txt");
+		TextOutputFile fileUser = new TextOutputFile(strQuizName + ".txt");
 
 		// Check whether the user has chosen to end their quiz
 		while(intEndCheck == 0){
@@ -161,14 +161,14 @@ public class FinalCPTNilatools{
 			con.print("Question " + intCount + ": ");
 			strUserQuiz = con.readLine();
 			// Print the options to the file
-			file.println(strUserQuiz);
+			fileUser.println(strUserQuiz);
 			
 			// Prompt user to write the 4 answer options
 			for(intLine = 0; intLine < 4; intLine++){
 				con.print("Option " + (intLine + 1) + ": ");
 				strOptions[intLine] = con.readLine();
 				// Print the options to the file
-				file.println(strOptions[intLine]);
+				fileUser.println(strOptions[intLine]);
 			}
 			
 			intCorrectOption = 0; // Reset value for the next correct option
@@ -182,7 +182,7 @@ public class FinalCPTNilatools{
 				}
 			}
 			
-			file.println(strOptions[intCorrectOption - 1]); // Print the correct option to the file
+			fileUser.println(strOptions[intCorrectOption - 1]); // Print the correct option to the file
 
 			intCount += 1;
 			con.println();
@@ -191,7 +191,7 @@ public class FinalCPTNilatools{
 			strUserQuiz = con.readLine();
 		}
 
-		file.close();
+		fileUser.close();
 		return strQuizName; // Return the name of the quiz
 	}
 	
@@ -345,7 +345,7 @@ public static char leaderBoard(Console con){
 		con.println("Shadow Scholar: Help Screen");
 		con.println("------------------------------------");
 		con.println("Greetings, Scholar! Prepare yourself for an exciting, fun, and addictive game");
-		con.println("designed to boost your general knowledge and challenge other with your own niche knowledge");
+		con.println("designed to boost your general knowledge and challenge others with your own niche knowledge");
 		con.println();
 		
 		con.println("How to Play");
