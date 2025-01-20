@@ -1,4 +1,5 @@
 import arc.*;
+import java.awt.*;
 import java.awt.image.*;
 
 public class FinalCPTNilatools{
@@ -73,7 +74,7 @@ public class FinalCPTNilatools{
 			con.println();
 			con.println();
 			con.println();
-			con.drawImage(imgQuestion, 0, 150);
+			con.drawImage(imgQuestion, 0, 250);
 			con.println();
 			con.println();
 			con.println();
@@ -109,7 +110,6 @@ public class FinalCPTNilatools{
 				intChoice = 4;
 			}else{
 				con.println("Please write a valid option");
-				con.println();
 			}
 		}
 		return intChoice;
@@ -171,17 +171,42 @@ public class FinalCPTNilatools{
 		return strQuizName;
 	}
 
-	public static float displayHeader(Console con, String strUserName, String strQuizName, float fltNumOut, float fltNumCorr){
+	public static double displayHeader(Console con, String strUserName, String strQuizName, double dblNumOut, double dblNumCorr, int intNumQuiz) {
+		con.println();
+		double dblScore = Math.round(dblNumCorr / dblNumOut * 10000.0) / 100.0;
+		BufferedImage imgstar = con.loadImage("star.png");
+
+		int targetWidth = (int)((dblNumOut / intNumQuiz) * 1280); // Calculate target width for the progress bar
+		int currentWidth = 0; // Start with 0 width
+
+		con.setDrawColor(Color.GREEN);
+		con.println("  " + (int) dblNumOut + "/" + intNumQuiz);
+		con.drawImage(imgstar, -5, 0); // Draw star icon once
+		
+		// Animate the progress bar
+		while (currentWidth < targetWidth) {
+			currentWidth += 20; // Increment width for animation effect
+			if (currentWidth > targetWidth) {
+				currentWidth = targetWidth; // Cap the width to target value
+			}
+			con.fillRect(12, 31, currentWidth, 18); // Draw the progress bar
+			con.drawImage(imgstar, -5, 0); // Draw star icon once
+			con.sleep(20); // Add a short delay for smooth animation
+			con.repaint();
+		}
+		con.println();
+		con.println();
+		con.println("Shadow Scholar: Quiz Playing");
 		con.println("------------------------------------");
 		con.println("Player: " + strUserName);
 		con.println("Quiz: " + strQuizName);
-		float fltScore = Math.round((fltNumCorr / fltNumOut) * 100);
-		con.println("Score: " + fltScore + " %");
+		con.println("Score: " + dblScore + " %");
 		con.println("------------------------------------");
 		con.println();
 
-		return fltScore;
+		return dblScore;
 	}
+
 	
 	public static void leaderBoard(Console con){
 		// Open highscores file
@@ -193,7 +218,6 @@ public class FinalCPTNilatools{
 		String strLine;
 		int intRow;
 		int intRow2;
-		int intBiggestName = 0;
 		
 		while(leaderBoardFile.eof() == false){
 			strLine = leaderBoardFile.readLine();
@@ -216,7 +240,7 @@ public class FinalCPTNilatools{
 		String[] strTemp;
 		for(intRow2 = 0; intRow2 < intTotal - 1; intRow2++){
 			for(intRow = 0; intRow < intTotal - 1 - intRow2; intRow++){
-				if(Float.parseFloat(strLeaderboard[intRow][1]) < Float.parseFloat(strLeaderboard[intRow + 1][1])){
+				if(Double.parseDouble(strLeaderboard[intRow][1]) < Double.parseDouble(strLeaderboard[intRow + 1][1])){
 					// Use a temporary array to move up and down a questions and their answers at a time
 					strTemp = strLeaderboard[intRow];
 					strLeaderboard[intRow] = strLeaderboard[intRow + 1];
@@ -225,26 +249,12 @@ public class FinalCPTNilatools{
 			}
 		}
 		
-		for(intRow = 0; intRow < intTotal; intRow++){
-			if(strLeaderboard[intRow][0].length() > intBiggestName){
-				intBiggestName = strLeaderboard[intRow][0].length();
-			}
-		}
-		
-		
-		
 		// Display header
 		con.println("Shadow Scholar: Leaderboard");
 		con.println("------------------------------------");
 		for (intRow = 0; intRow < intTotal; intRow++) {
 			String strName = strLeaderboard[intRow][0];
-			String strSpaces = "";
-			// Add spaces to align names
-			for (intRow2 = strName.length(); intRow2 < intBiggestName + 2; intRow2++) {
-				strSpaces += " ";
-			}
-
-			con.println((intRow + 1) + ". " + strName + strSpaces + "| " + strLeaderboard[intRow][1]);
+			con.println((intRow + 1) + ". " + strName + "| " + strLeaderboard[intRow][1]);
 		}
 	}
 
@@ -276,5 +286,49 @@ public class FinalCPTNilatools{
 		con.sleep(1000);
 		con.println("An impasta");
 		con.sleep(3000);
+	}
+	
+		// Method to print out the quiz options
+	public static String[] printQuizOptions(Console con){
+		TextInputFile quizListFile = new TextInputFile("quizzes.txt");
+		int intNumQuiz = 0;
+		int intQCount = 0;
+		String[] strQuizList;
+
+		// Count number of quizzes from file
+		while(quizListFile.eof() == false){
+			quizListFile.readLine();
+			intNumQuiz += 1;
+		}
+
+		// Put quizzes into an array for later iteration
+		strQuizList = new String[intNumQuiz];
+		quizListFile.close();
+		quizListFile = new TextInputFile("quizzes.txt");
+
+		// Print out quiz options in a numbered list to console
+		con.println("Shadow Scholar: Quiz Selection");
+		con.println("------------------------------------");
+		while(quizListFile.eof() == false && intQCount < intNumQuiz){
+			strQuizList[intQCount] = quizListFile.readLine();
+			int intQuizLength = strQuizList[intQCount].length();
+			strQuizList[intQCount] = (strQuizList[intQCount]).substring(0, 1).toUpperCase() + (strQuizList[intQCount]).substring(1, intQuizLength);
+			con.println((intQCount + 1) + ". " + (strQuizList[intQCount]));
+			intQCount += 1;
+		}
+
+		quizListFile.close();
+		return strQuizList;
+	}
+	
+	
+	// Method to display the main menu and get user input
+	public static char displayMainMenu(Console con, BufferedImage imgMainMenu, Color colBg){
+		con.clear();
+		con.drawImage(imgMainMenu, 0, 0);
+		con.println();
+		char chrInitChoice = con.getChar();
+		con.setBackgroundColor(colBg);
+		return chrInitChoice;
 	}
 }
