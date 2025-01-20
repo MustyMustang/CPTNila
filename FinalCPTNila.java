@@ -175,11 +175,9 @@ public class FinalCPTNila{
 			// User chooses to view the leaderboard
 			}else if(chrInitChoice == 'l'){
 				
-				FinalCPTNilatools.leaderBoard(con);
+				chrInitChoice = FinalCPTNilatools.leaderBoard(con);
 
 				con.println();
-				con.println("(q)uit or (m)ain menu");
-				chrInitChoice = con.getChar();
 				
 				// Quit game or head back to main menu from leaderboard screen
 				if(chrInitChoice == 'q'){

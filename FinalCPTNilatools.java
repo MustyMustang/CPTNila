@@ -196,7 +196,7 @@ public class FinalCPTNilatools{
 	}
 	
 	// Method to print out header for game play
-	public static double displayHeader(Console con, String strUserName, String strQuizName, double dblNumOut, double dblNumCorr, int intNumQuiz) {
+	public static double displayHeader(Console con, String strUserName, String strQuizName, double dblNumOut, double dblNumCorr, int intNumQuiz){
 		
 		// Variables
 		BufferedImage imgstar = con.loadImage("star.png"); // Buffer image for star icon
@@ -212,9 +212,9 @@ public class FinalCPTNilatools{
 		con.drawImage(imgstar, -5, 0); // Draw star to put under the question count
 		
 		// Animate progress bar
-		while (intCurrentWidth < intFinalWidth) {
+		while (intCurrentWidth < intFinalWidth){
 			intCurrentWidth += 20; // Add width incrementally
-			if (intCurrentWidth > intFinalWidth) {
+			if (intCurrentWidth > intFinalWidth){
 				intCurrentWidth = intFinalWidth; // Cap the width to the final value
 			}
 			con.fillRect(12, 31, intCurrentWidth, 18); // Draw the progress bar
@@ -237,67 +237,106 @@ public class FinalCPTNilatools{
 		return dblScore; // Return the score
 	}
 
-	// Method to display leaderboard
-	public static void leaderBoard(Console con){
-		
-		// Create and initialise variables
-		String strNameL = "";
-		String strScore = "";
-		int intCount = 0;
-		String[][] strLeaderboard;
-		String strLine;
-		int intRow;
-		int intRow2;
-		
-		// Open highscores file
-		TextInputFile leaderBoardFile = new TextInputFile("highscores.txt");
-		
-		// Count number of lines in leaderboard file
-		while(leaderBoardFile.eof() == false){
-			strLine = leaderBoardFile.readLine();
-			intCount += 1;
-		}
-		
-		// Calculate number of scores
-		int intTotal = intCount / 2;
-		
-		// Create leaderboard array to hold names and scores
-		strLeaderboard = new String[intCount][2];
-		
-		leaderBoardFile.close();
-		
-		// Reopen leaderboard file to store values
-		leaderBoardFile = new TextInputFile("highscores.txt");
-		
-		// Store name and score for each row in the array
-		for(intRow = 0; intRow < intTotal; intRow++){
-			strLeaderboard[intRow][0] = leaderBoardFile.readLine();
-			strLeaderboard[intRow][1] = leaderBoardFile.readLine();
-		}
-		
-		// Bubble Sort
-		String[] strTemp;
-		for(intRow2 = 0; intRow2 < intTotal - 1; intRow2++){
-			for(intRow = 0; intRow < intTotal - 1 - intRow2; intRow++){
-				if(Double.parseDouble(strLeaderboard[intRow][1]) < Double.parseDouble(strLeaderboard[intRow + 1][1])){
-					// Use a temporary array to move up name and scores at once
-					strTemp = strLeaderboard[intRow];
-					strLeaderboard[intRow] = strLeaderboard[intRow + 1];
-					strLeaderboard[intRow + 1] = strTemp;
-				}
+public static char leaderBoard(Console con){
+	// Create and initialize variables
+	String[][] strLeaderboard;
+	int intCount = 0;
+	int intScroll = 1; // Start with the first section (1 for top 24, 2 for the rest)
+	String strLine;
+	char chrKeyPressed = ' ';
+	int intDone = 1;
+
+	// Open highscores file
+	TextInputFile leaderBoardFile = new TextInputFile("highscores.txt");
+
+	// Count number of lines in the leaderboard file
+	while (!leaderBoardFile.eof()){
+		strLine = leaderBoardFile.readLine();
+		intCount++;
+	}
+
+	// Calculate number of scores (assume each entry has a name and a score)
+	int intTotal = intCount / 2;
+
+	// Create leaderboard array to hold names and scores
+	strLeaderboard = new String[intTotal][2];
+
+	leaderBoardFile.close();
+
+	// Reopen leaderboard file to store values in the array
+	leaderBoardFile = new TextInputFile("highscores.txt");
+
+	// Store name and score for each row in the array
+	for (int intRow = 0; intRow < intTotal; intRow++){
+		strLeaderboard[intRow][0] = leaderBoardFile.readLine(); // Name
+		strLeaderboard[intRow][1] = leaderBoardFile.readLine(); // Score
+	}
+
+	// Close the file after reading
+	leaderBoardFile.close();
+
+	// Bubble sort leaderboard by scores in descending order
+	for (int intRow2 = 0; intRow2 < intTotal - 1; intRow2++){
+		for (int intRow = 0; intRow < intTotal - 1 - intRow2; intRow++){
+			if (Double.parseDouble(strLeaderboard[intRow][1]) < Double.parseDouble(strLeaderboard[intRow + 1][1])){
+				// Swap rows
+				String[] strTemp = strLeaderboard[intRow];
+				strLeaderboard[intRow] = strLeaderboard[intRow + 1];
+				strLeaderboard[intRow + 1] = strTemp;
 			}
 		}
-		
-		// Display header
-		con.println("Shadow Scholar: Leaderboard");
-		con.println("------------------------------------");
-		
-		// Print the names and scores to the screen
-		for (intRow = 0; intRow < intTotal; intRow++) {
-			String strName = strLeaderboard[intRow][0];
-			con.println((intRow + 1) + ". " + strName + "| " + strLeaderboard[intRow][1]);
+	}
+
+	// Display leaderboard
+	while(intDone == 1){
+		if(intScroll == 1){
+			con.clear();
+			con.println("Shadow Scholar: Leaderboard");
+			con.println("------------------------------------");
+			for (int intRow = 0; intRow < 24 && intRow < intTotal; intRow++){ // Show the top 24 scores
+				con.println((intRow + 1) + "." + strLeaderboard[intRow][0] + " | " + strLeaderboard[intRow][1]);
+			}
+			con.println();
+			con.println("Press enter to see the rest..."); // Ask user if they want to see the rest of the scores
+			con.println("(q)uit or go to (m)ain menu"); // Ask user if they would like to go to the main menu or quit
+
+			// Wait for any key to be pressed
+			chrKeyPressed = con.getChar();
+			
+			// Check if they want to continue to look at leaderboard, quit or go to the main menu
+			if(chrKeyPressed == 'q' || chrKeyPressed == 'm'){
+				intDone = 0;
+				return chrKeyPressed; // Return their option
+			}else{
+				intScroll = 2; // Flip to the next section
+			}
+		} else if(intScroll == 2){
+			// Display the remaining entries
+			con.clear();
+			con.println("Shadow Scholar: Leaderboard (Continued)"); // Display header
+			con.println("------------------------------------");
+			for (int intRow = 24; intRow < intTotal; intRow++){ // Display the rest of the scores
+				con.println((intRow + 1) + ". " + strLeaderboard[intRow][0] + " | " + strLeaderboard[intRow][1]);
+			}
+			con.println();
+			con.println("Press enter to go back to the top...");
+			con.println("(q)uit or go to (m)ain menu");
+
+			// Wait for any key to be pressed
+			chrKeyPressed = con.getChar();
+			
+			// Check if they want to continue to look at leaderboard, quit or go to the main menu
+			if(chrKeyPressed == 'q' || chrKeyPressed == 'm'){
+				intDone = 0;
+				return chrKeyPressed; // Return their option
+			}else{
+				intScroll = 1; // Flip to the next section
+			}
 		}
 	}
+	return chrKeyPressed;
+}
+
 	
 	// Method to display help screen
 	public static void helpScreen(Console con){
