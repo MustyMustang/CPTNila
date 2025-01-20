@@ -100,17 +100,27 @@ public class FinalCPTNila{
 					con.clear();
 					con.repaint();
 					con.setBackgroundColor(colBg);
+					
+					// Open higscores file and out score and name to the file
 					TextOutputFile highscoresfile = new TextOutputFile("highscores.txt", true);
 					highscoresfile.println(strName); // Store the name to the highscores file
-					highscoresfile.println(FinalCPTNilatools.displayHeader(con, strName, strQuizChoice, dblNumOut, dblNumCorr, strQuizData.length)); // Store the score to the highscores file
+					double dblScore = FinalCPTNilatools.displayHeader(con, strName, strQuizChoice, dblNumOut, dblNumCorr, strQuizData.length);
+					highscoresfile.println(dblScore); // Store the score to the highscores file
 					highscoresfile.close(); 
-					con.println();
-					con.println();
+					
+					// Display that the quiz was completed
 					con.println();
 					con.println("Quiz Completed!");
+					con.println();
+					
+					// Denote whether the player failed or passed
+					if(dblScore < 50.0){
+						con.println("You Failed!");
+					}else{
+						con.println("You Passed!");
+					}
 					
 					// Ask user what they want to do after playing the quiz
-					con.println();
 					con.print("Would you like to (p)lay again, return to (m)ain menu, or (q)uit?");
 					chrReplay = con.getChar();
 					con.clear();
