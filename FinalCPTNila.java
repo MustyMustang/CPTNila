@@ -12,6 +12,8 @@ Purpose:	Facilitate a fun and engaging way to boost your general knowledge
 Author:		Mathivannan. N 
 
 Created:	19/12/2024
+
+Version:    1.4
 -------------------------------------------------------------------------------
 */
 
@@ -27,7 +29,7 @@ public class FinalCPTNila{
 		int intDone = 0;
 		String[][] strQuizData = new String[0][0];
 		BufferedImage imgMainMenu = con.loadImage("mainMenu.png");
-		String strName;
+		String strName = "";
 		char chrInitChoice;
 		
 		// Loop for running throughout the whole game
@@ -119,6 +121,7 @@ public class FinalCPTNila{
 					fileHighscores.println(strName); // Store the name to the highscores file
 					double dblScore = FinalCPTNilatools.displayHeader(con, strName, strQuizChoice, dblNumOut, dblNumCorr, strQuizData.length);
 					fileHighscores.println(dblScore); // Store the score to the highscores file
+					fileHighscores.println(strQuizChoice);
 					fileHighscores.close(); 
 					
 					// Display that the quiz was completed

@@ -248,33 +248,34 @@ public static char leaderBoard(Console con){
 	int intDone = 1;
 
 	// Open highscores file
-	TextInputFile leaderBoardFile = new TextInputFile("highscores.txt");
+	TextInputFile fileLeaderBoard = new TextInputFile("highscores.txt");
 
 	// Count number of lines in the leaderboard file
-	while (!leaderBoardFile.eof()){
-		strLine = leaderBoardFile.readLine();
+	while (fileLeaderBoard.eof() == false){
+		strLine = fileLeaderBoard.readLine();
 		intCount++;
 	}
 
-	// Calculate number of scores (assume each entry has a name and a score)
-	int intTotal = intCount / 2;
+	// Calculate number of scores (assume each entry has a name and a score, and quiz name)
+	int intTotal = intCount / 3;
 
 	// Create leaderboard array to hold names and scores
-	strLeaderboard = new String[intTotal][2];
+	strLeaderboard = new String[intTotal][3];
 
-	leaderBoardFile.close();
+	fileLeaderBoard.close();
 
 	// Reopen leaderboard file to store values in the array
-	leaderBoardFile = new TextInputFile("highscores.txt");
+	fileLeaderBoard = new TextInputFile("highscores.txt");
 
 	// Store name and score for each row in the array
 	for (int intRow = 0; intRow < intTotal; intRow++){
-		strLeaderboard[intRow][0] = leaderBoardFile.readLine(); // Name
-		strLeaderboard[intRow][1] = leaderBoardFile.readLine(); // Score
+		strLeaderboard[intRow][0] = fileLeaderBoard.readLine(); // Name
+		strLeaderboard[intRow][1] = fileLeaderBoard.readLine(); // Score
+		strLeaderboard[intRow][2] = fileLeaderBoard.readLine(); // Quiz name
 	}
 
 	// Close the file after reading
-	leaderBoardFile.close();
+	fileLeaderBoard.close();
 
 	// Bubble sort leaderboard by scores in descending order
 	for (int intRow2 = 0; intRow2 < intTotal - 1; intRow2++){
@@ -295,10 +296,10 @@ public static char leaderBoard(Console con){
 			con.println("Shadow Scholar: Leaderboard");
 			con.println("------------------------------------");
 			for (int intRow = 0; intRow < 24 && intRow < intTotal; intRow++){ // Show the top 24 scores
-				con.println((intRow + 1) + "." + strLeaderboard[intRow][0] + " | " + strLeaderboard[intRow][1]);
+				con.println((intRow + 1) + "." + strLeaderboard[intRow][0] + " | " + strLeaderboard[intRow][1] + " | " + strLeaderboard[intRow][2]);
 			}
 			con.println();
-			con.println("Press enter to see the rest..."); // Ask user if they want to see the rest of the scores
+			con.println("Press enter to see the rest..."); // Ask user if they want to see the rest of the scores - used to hold up to 49 scores
 			con.println("(q)uit or go to (m)ain menu"); // Ask user if they would like to go to the main menu or quit
 
 			// Wait for any key to be pressed
@@ -317,7 +318,7 @@ public static char leaderBoard(Console con){
 			con.println("Shadow Scholar: Leaderboard (Continued)"); // Display header
 			con.println("------------------------------------");
 			for (int intRow = 24; intRow < intTotal; intRow++){ // Display the rest of the scores
-				con.println((intRow + 1) + ". " + strLeaderboard[intRow][0] + " | " + strLeaderboard[intRow][1]);
+				con.println((intRow + 1) + ". " + strLeaderboard[intRow][0] + " | " + strLeaderboard[intRow][1] + " | " + strLeaderboard[intRow][2]);
 			}
 			con.println();
 			con.println("Press enter to go back to the top...");
@@ -381,33 +382,35 @@ public static char leaderBoard(Console con){
 		String[] strQuizList;
 		
 		// Open file with quiz names
-		TextInputFile quizListFile = new TextInputFile("quizzes.txt");
+		TextInputFile fileQuizList = new TextInputFile("quizzes.txt");
 		
 		// Count number of quizzes from file
-		while(quizListFile.eof() == false){
-			quizListFile.readLine();
+		while(fileQuizList.eof() == false){
+			fileQuizList.readLine();
 			intNumQuiz += 1;
 		}
 
 		// Put quizzes into an array for later iteration
 		strQuizList = new String[intNumQuiz];
-		quizListFile.close();
-		quizListFile = new TextInputFile("quizzes.txt");
+		fileQuizList.close();
+		
+		// Reopen text file to print quiz options
+		fileQuizList = new TextInputFile("quizzes.txt");
 
 		// Display header
 		con.println("Shadow Scholar: Quiz Selection");
 		con.println("------------------------------------");
 		
 		// Print out quiz options in a numbered list to console
-		while(quizListFile.eof() == false && intQCount < intNumQuiz){
-			strQuizList[intQCount] = quizListFile.readLine();
+		while(fileQuizList.eof() == false && intQCount < intNumQuiz){
+			strQuizList[intQCount] = fileQuizList.readLine();
 			int intQuizLength = strQuizList[intQCount].length();
 			strQuizList[intQCount] = (strQuizList[intQCount]).substring(0, 1).toUpperCase() + (strQuizList[intQCount]).substring(1, intQuizLength);
 			con.println((intQCount + 1) + ". " + (strQuizList[intQCount]));
 			intQCount += 1;
 		}
 
-		quizListFile.close();
+		fileQuizList.close();
 		return strQuizList; // Return the array with the quiz names
 	}
 	
