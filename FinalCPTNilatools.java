@@ -119,6 +119,7 @@ public class FinalCPTNilatools{
 			}else{
 				// Ask user to write a valid option
 				con.println("Please write a valid option");
+				System.out.println("Invalid Input");
 			}
 		}
 		// Return the index number of the option selected
