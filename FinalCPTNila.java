@@ -5,8 +5,10 @@ import java.awt.image.*;
 /* 
 -------------------------------------------------------------------------------
 Name:	    Multiple Choice Game (ICS3U1)
+
 Purpose:	Facilitate a fun and engaging way to boost your general knowledge 
             and challenge others with your own niche knowledge
+            
 Author:		Mathivannan. N 
 
 Created:	19/12/2024
