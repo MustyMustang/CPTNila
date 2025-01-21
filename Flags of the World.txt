@@ -1,8 +1,8 @@
 southafrica.png
 Niger
 Nigeria
-Democratic Republic of the Congo
 South Africa
+Democratic Republic of the Congo
 South Africa
 cambodia.png
 Thailand
@@ -11,21 +11,21 @@ Nepal
 Cambodia
 Cambodia
 suriname.png
+Suriname
 French Guiana
 Guyana
 Bolivia
 Suriname
-Suriname
 chad.png
-Chad
 Ireland
+Chad
 United Kingdom
 Indonesia
 Chad
 papuanewguinea.png
-Papua New Guinea
 East Timor
 Belize
+Papua New Guinea
 Saint Dominica
 Papua New Guinea
 latvia.png
@@ -43,8 +43,8 @@ Philippines
 liberia.png
 United States
 Canada
-Libya
 Liberia
+Libya
 Liberia
 srilanka.png
 Maldives
@@ -59,9 +59,9 @@ Eswatini
 Mongolia
 Laos
 mexico.png
-Mexico
 Italy
 Chile
+Mexico
 Slovakia
 Mexico
 cyprus.png
@@ -84,7 +84,7 @@ France
 France
 belarus.png
 Saudi Arabia
+Belarus
 Albania
 Iraq
-Belarus
 Belarus

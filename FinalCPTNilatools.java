@@ -202,7 +202,7 @@ public class FinalCPTNilatools{
 		// Variables
 		BufferedImage imgstar = con.loadImage("star.png"); // Buffer image for star icon
 		int intCurrentWidth = 0; // Progress bar with 0 width
-		int intFinalWidth = (int)((dblNumOut / intNumQuiz) * 1280); // Final width of the progress bar
+		int intFinalWidth = (int)((dblNumOut / intNumQuiz) * 1225); // Final width of the progress bar
 		double dblScore = Math.round(dblNumCorr / dblNumOut * 10000.0) / 100.0; // Calculate score to 2 decimal places
 		Color colPro = new Color(47, 140, 36); // Initialise colour of progress bar
 		con.setDrawColor(colPro); // Set colour of progress bar

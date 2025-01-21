@@ -74,7 +74,6 @@ public class FinalCPTNila{
 
 					// Once input is valid open the text file
 					strQuizChoice = strQuizList[intQuizChoice - 1];
-					System.out.println("Quiz Choice: " + strQuizChoice);
 					// Open file from the selected choice
 					strQuizData = FinalCPTNilatools.formatQuiz(strQuizChoice.toLowerCase() + ".txt");
 
@@ -149,6 +148,8 @@ public class FinalCPTNila{
 						intReplay = 0;
 					}else if(chrReplay == 'p'){
 						// User can play another quiz
+						con.clear();
+						con.setBackgroundColor(colBg);
 						intReplay = 1;
 					}else{
 						// Invalid input is entered and user is sent back to main menu
