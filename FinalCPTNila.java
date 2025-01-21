@@ -4,16 +4,13 @@ import java.awt.image.*;
 
 /* 
 -------------------------------------------------------------------------------
-Name:	    Multiple Choice Game (ICS3U1)
+Name:	    Multiple Choice Game - Shadow Scholar (ICS3U1)
 
-Purpose:	Facilitate a fun and engaging way to boost your general knowledge 
-            and challenge others with your own niche knowledge
-            
 Author:		Mathivannan. N 
 
 Created:	19/12/2024
 
-Version:    1.4
+Version:    1.4.5
 -------------------------------------------------------------------------------
 */
 
